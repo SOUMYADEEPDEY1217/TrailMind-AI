@@ -1,0 +1,377 @@
+@import "tailwindcss";
+
+@theme {
+  --font-editorial: 'Playfair Display', Georgia, serif;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-navy-950: #080d1a;
+  --color-navy-900: #0f172a;
+  --color-navy-800: #1e293b;
+  --color-forest-950: #06130b;
+  --color-forest-900: #0d2317;
+  --color-forest-800: #153825;
+  --color-forest-700: #1e4d34;
+  --color-sunset-orange: #f97316;
+  --color-warm-yellow: #fbbf24;
+  --color-amber-gold: #f59e0b;
+  --color-twilight-lavender: #a855f7;
+  --color-moss-500: #4f845a;
+  --breakpoint-xs: 380px;
+}
+
+:root {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #070c14;
+  color: #f1f5f3;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Editorial Serif Utility */
+.font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Cinematic Keyframe Animations */
+@keyframes driftSlow {
+  0% { transform: translateX(-5%); }
+  50% { transform: translateX(5%); }
+  100% { transform: translateX(-5%); }
+}
+
+@keyframes driftCloudsFar {
+  0% { transform: translateX(-10%); }
+  100% { transform: translateX(110%); }
+}
+
+@keyframes driftCloudsNear {
+  0% { transform: translateX(-25%); }
+  100% { transform: translateX(120%); }
+}
+
+@keyframes floatParticles {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+  50% { transform: translateY(-24px) translateX(12px); opacity: 0.9; }
+}
+
+@keyframes swayGrass {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(2.5deg) skewX(1deg); }
+}
+
+@keyframes swayGrassReverse {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-2.2deg) skewX(-1.5deg); }
+}
+
+@keyframes soarBird {
+  0% { transform: translate(-10vw, 20px) scale(0.7); }
+  50% { transform: translate(50vw, -15px) scale(0.85); }
+  100% { transform: translate(110vw, -40px) scale(0.65); }
+}
+
+@keyframes shimmerWater {
+  0%, 100% { opacity: 0.65; transform: scaleY(1); }
+  50% { opacity: 0.95; transform: scaleY(1.04); }
+}
+
+@keyframes pulseAtmosphere {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.75; }
+}
+
+@keyframes fireflyGlow {
+  0%, 100% { transform: translate(0, 0) scale(0.8); opacity: 0.2; }
+  25% { transform: translate(10px, -15px) scale(1.2); opacity: 0.95; }
+  50% { transform: translate(-8px, -30px) scale(0.9); opacity: 0.4; }
+  75% { transform: translate(14px, -20px) scale(1.3); opacity: 0.85; }
+}
+
+.anim-drift-clouds-far {
+  animation: driftCloudsFar 85s linear infinite;
+}
+
+.anim-drift-clouds-near {
+  animation: driftCloudsNear 55s linear infinite;
+}
+
+.anim-soar-bird {
+  animation: soarBird 32s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.anim-soar-bird-delay {
+  animation: soarBird 38s cubic-bezier(0.4, 0, 0.2, 1) infinite 14s;
+}
+
+.anim-sway-grass {
+  transform-origin: bottom center;
+  animation: swayGrass 6s ease-in-out infinite;
+}
+
+.anim-sway-grass-alt {
+  transform-origin: bottom center;
+  animation: swayGrassReverse 7.5s ease-in-out infinite;
+}
+
+.anim-shimmer-water {
+  animation: shimmerWater 3s ease-in-out infinite;
+}
+
+.anim-pulse-atmosphere {
+  animation: pulseAtmosphere 8s ease-in-out infinite;
+}
+
+.anim-firefly-1 {
+  animation: fireflyGlow 5s ease-in-out infinite;
+}
+
+.anim-firefly-2 {
+  animation: fireflyGlow 7s ease-in-out infinite 1.5s;
+}
+
+.anim-firefly-3 {
+  animation: fireflyGlow 6s ease-in-out infinite 3s;
+}
+
+@keyframes drawTrail {
+  0% { stroke-dashoffset: 1200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes spinSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.08); }
+}
+
+.anim-draw-trail {
+  stroke-dasharray: 1200;
+  animation: drawTrail 4s ease-in-out infinite alternate;
+}
+
+.anim-spin-slow {
+  animation: spinSlow 28s linear infinite;
+}
+
+.anim-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090e17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2e25;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2f493b;
+}
+
+/* ========================================================
+   SUBTLE CINEMATIC ENVIRONMENTAL MOTION UTILITIES
+   GPU-accelerated, lightweight, naturalistic easing
+   ======================================================== */
+
+/* Water Ripple Animation */
+@keyframes waterRipple {
+  0% {
+    transform: scaleX(0.96) scaleY(0.95);
+    opacity: 0.18;
+  }
+  50% {
+    transform: scaleX(1.05) scaleY(1.08);
+    opacity: 0.32;
+  }
+  100% {
+    transform: scaleX(0.96) scaleY(0.95);
+    opacity: 0.18;
+  }
+}
+
+.anim-water-ripple {
+  animation: waterRipple 7s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.anim-water-ripple-delayed {
+  animation: waterRipple 9s ease-in-out infinite 3.5s;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* Floating Leaves */
+@keyframes driftLeaf1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(-90px, 95px, 0) rotate(140deg);
+  }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-190px, 200px, 0) rotate(290deg);
+    opacity: 0;
+  }
+}
+
+@keyframes driftLeaf2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(20deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  55% {
+    transform: translate3d(-120px, 80px, 0) rotate(-110deg);
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(-240px, 170px, 0) rotate(-220deg);
+    opacity: 0;
+  }
+}
+
+@keyframes driftLeaf3 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-15deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate3d(-80px, 110px, 0) rotate(90deg);
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(-170px, 220px, 0) rotate(210deg);
+    opacity: 0;
+  }
+}
+
+.anim-drift-leaf-1 {
+  animation: driftLeaf1 14s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.anim-drift-leaf-2 {
+  animation: driftLeaf2 18s cubic-bezier(0.4, 0, 0.6, 1) infinite 4s;
+  will-change: transform, opacity;
+}
+
+.anim-drift-leaf-3 {
+  animation: driftLeaf3 16s cubic-bezier(0.4, 0, 0.6, 1) infinite 8s;
+  will-change: transform, opacity;
+}
+
+/* Subtle Explorer Character Breathing / Idle Motion */
+@keyframes hikerIdle {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-1.5px) scale(1.002);
+  }
+}
+
+.anim-hiker-idle {
+  animation: hikerIdle 4.5s ease-in-out infinite;
+  transform-origin: bottom center;
+  will-change: transform;
+}
+
+/* Rising Morning Light Particles */
+@keyframes particleRise {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate3d(24px, -110px, 0);
+    opacity: 0;
+  }
+}
+
+.anim-particle-rise-1 {
+  animation: particleRise 9s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+.anim-particle-rise-2 {
+  animation: particleRise 11s ease-out infinite 3s;
+  will-change: transform, opacity;
+}
+
+.anim-particle-rise-3 {
+  animation: particleRise 8s ease-out infinite 5.5s;
+  will-change: transform, opacity;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-drift-clouds-far,
+  .anim-drift-clouds-near,
+  .anim-soar-bird,
+  .anim-soar-bird-delay,
+  .anim-sway-grass,
+  .anim-sway-grass-alt,
+  .anim-shimmer-water,
+  .anim-pulse-atmosphere,
+  .anim-firefly-1,
+  .anim-firefly-2,
+  .anim-firefly-3,
+  .anim-water-ripple,
+  .anim-water-ripple-delayed,
+  .anim-drift-leaf-1,
+  .anim-drift-leaf-2,
+  .anim-drift-leaf-3,
+  .anim-hiker-idle,
+  .anim-particle-rise-1,
+  .anim-particle-rise-2,
+  .anim-particle-rise-3,
+  .anim-draw-trail,
+  .anim-spin-slow,
+  .anim-pulse-glow {
+    animation: none !important;
+    transition: none !important;
+  }
+}

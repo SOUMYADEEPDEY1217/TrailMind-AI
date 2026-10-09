@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020814" />
+      <stop offset="50%" stop-color="#071b2f" />
+      <stop offset="100%" stop-color="#0e3424" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Solid rounded canvas background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Outer compass navigation circle -->
+  <circle cx="256" cy="256" r="208" fill="none" stroke="rgba(251,191,36,0.2)" stroke-width="3" stroke-dasharray="6 8" />
+  <circle cx="256" cy="256" r="192" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+
+  <!-- Cardinal points -->
+  <circle cx="256" cy="64" r="5" fill="#fbbf24" />
+  <circle cx="256" cy="448" r="4" fill="rgba(255,255,255,0.4)" />
+  <circle cx="64" cy="256" r="4" fill="rgba(255,255,255,0.4)" />
+  <circle cx="448" cy="256" r="4" fill="rgba(255,255,255,0.4)" />
+
+  <!-- Mountain Peaks in Background -->
+  <path d="M96 348 L192 220 L272 310 L352 190 L432 348 Z" fill="#0c2538" opacity="0.8" />
+  <path d="M144 348 L224 246 L304 348 Z" fill="#133d32" opacity="0.9" />
+
+  <!-- Stylized Trail Pathway Ribbons -->
+  <path d="M128 390 C200 370, 240 330, 256 256 C272 182, 340 140, 384 120" 
+        fill="none" stroke="url(#goldGrad)" stroke-width="14" stroke-linecap="round" filter="url(#glow)" />
+  <path d="M160 410 C220 395, 250 360, 256 310" 
+        fill="none" stroke="url(#emeraldGrad)" stroke-width="6" stroke-linecap="round" opacity="0.7" />
+
+  <!-- Central Compass Star / Waypoint Diamond -->
+  <polygon points="256,128 274,236 384,256 274,276 256,384 238,276 128,256 238,236" fill="url(#goldGrad)" filter="url(#glow)" />
+  <polygon points="256,150 268,242 360,256 268,270 256,362 244,270 152,256 244,242" fill="#fffbeb" opacity="0.9" />
+
+  <!-- Central Waypoint Core -->
+  <circle cx="256" cy="256" r="14" fill="#04121e" />
+  <circle cx="256" cy="256" r="8" fill="#fbbf24" />
+</svg>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Suppress harmless HMR WebSocket errors in cloud preview environment (as per runtime guidelines) -->
+    <script>
+      (function() {
+        var NativeWebSocket = window.WebSocket;
+        if (NativeWebSocket) {
+          function MockViteWebSocket(url, protocols) {
+            if (
+              protocols === 'vite-hmr' ||
+              protocols === 'vite-ping' ||
+              (typeof url === 'string' && (url.indexOf('token=') !== -1 || url.indexOf('24678') !== -1))
+            ) {
+              var listeners = {};
+              return {
+                readyState: 1, // OPEN
+                OPEN: 1,
+                CONNECTING: 0,
+                CLOSING: 2,
+                CLOSED: 3,
+                addEventListener: function(event, fn) {
+                  if (!listeners[event]) listeners[event] = [];
+                  listeners[event].push(fn);
+                  if (event === 'open') {
+                    setTimeout(function() { fn({ type: 'open' }); }, 0);
+                  }
+                },
+                removeEventListener: function(event, fn) {
+                  if (!listeners[event]) return;
+                  listeners[event] = listeners[event].filter(function(f) { return f !== fn; });
+                },
+                dispatchEvent: function() { return true; },
+                send: function() {},
+                close: function() {}
+              };
+            }
+            return new NativeWebSocket(url, protocols);
+          }
+          MockViteWebSocket.prototype = NativeWebSocket.prototype;
+          MockViteWebSocket.CONNECTING = 0;
+          MockViteWebSocket.OPEN = 1;
+          MockViteWebSocket.CLOSING = 2;
+          MockViteWebSocket.CLOSED = 3;
+          window.WebSocket = MockViteWebSocket;
+        }
+
+        var origError = console.error;
+        console.error = function() {
+          var args = Array.prototype.slice.call(arguments);
+          var text = args.map(function(item) {
+            return String(item && item.message ? item.message : item);
+          }).join(' ');
+          if (text.indexOf('WebSocket') !== -1 || (text.indexOf('[vite]') !== -1 && text.indexOf('connect') !== -1)) {
+            return;
+          }
+          origError.apply(console, args);
+        };
+        window.addEventListener('error', function(event) {
+          var msg = event && event.message ? String(event.message) : '';
+          if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('@vite/client') !== -1) {
+            event.preventDefault();
+            event.stopPropagation();
+            return true;
+          }
+        }, true);
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event && event.reason ? String(event.reason.message || event.reason) : '';
+          if (reason.indexOf('WebSocket') !== -1 || reason.indexOf('@vite/client') !== -1) {
+            event.preventDefault();
+            event.stopPropagation();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
+    <title>TrailMind AI — AI that gets you outside</title>
+    <meta name="description" content="Outdoor AI companion that creates personalized real-world micro-adventures based on your time, mood, and environment. The screen is the shortest part of the experience." />
+    <meta property="og:title" content="TrailMind AI — AI that gets you outside" />
+    <meta property="og:description" content="Personalized real-world outdoor adventures. Screen time under 90 seconds, real outdoor immersion." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#030812" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="TrailMind" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-stone-900 text-stone-100 antialiased selection:bg-emerald-500/30 selection:text-emerald-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

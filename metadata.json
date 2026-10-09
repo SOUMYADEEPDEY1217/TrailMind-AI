@@ -1,0 +1,7 @@
+{
+  "name": "TrailMind AI",
+  "description": "Outdoor AI companion that gets you outside with personalized real-world micro-adventures.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

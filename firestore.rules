@@ -1,0 +1,150 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // GLOBAL SECURITY HELPERS & GUARDS
+    // =========================================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // =========================================================================
+    // ENTITY VALIDATION HELPERS
+    // =========================================================================
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid']) &&
+        data.keys().hasOnly([
+          'uid',
+          'email',
+          'displayName',
+          'photoURL',
+          'experienceLevel',
+          'preferredBiome',
+          'createdAt',
+          'lastLoginAt',
+          'totalAdventures',
+          'totalOutdoorMinutes',
+          'serverCreatedAt',
+          'updatedAt'
+        ]) &&
+        data.uid is string &&
+        data.uid.size() > 0 &&
+        data.uid.size() <= 128 &&
+        (!('email' in data) || data.email == null || (data.email is string && data.email.size() <= 254)) &&
+        (!('displayName' in data) || data.displayName == null || (data.displayName is string && data.displayName.size() <= 100)) &&
+        (!('photoURL' in data) || data.photoURL == null || (data.photoURL is string && data.photoURL.size() <= 1024)) &&
+        (!('experienceLevel' in data) || (data.experienceLevel is string && data.experienceLevel.size() <= 64)) &&
+        (!('preferredBiome' in data) || (data.preferredBiome is string && data.preferredBiome.size() <= 64)) &&
+        (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 64)) &&
+        (!('lastLoginAt' in data) || (data.lastLoginAt is string && data.lastLoginAt.size() <= 64)) &&
+        (!('totalAdventures' in data) || (data.totalAdventures is number && data.totalAdventures >= 0)) &&
+        (!('totalOutdoorMinutes' in data) || (data.totalOutdoorMinutes is number && data.totalOutdoorMinutes >= 0));
+    }
+
+    function isValidAdventure(data, userId) {
+      return data.keys().hasAll(['id', 'userId']) &&
+        data.userId == userId &&
+        data.id is string &&
+        data.id.size() <= 128 &&
+        (!('title' in data) || (data.title is string && data.title.size() <= 200)) &&
+        (!('durationMinutes' in data) || (data.durationMinutes is number && data.durationMinutes >= 0)) &&
+        (!('environment' in data) || (data.environment is string && data.environment.size() <= 64));
+    }
+
+    function isValidMemory(data, userId) {
+      return data.keys().hasAll(['id', 'userId']) &&
+        data.userId == userId &&
+        data.id is string &&
+        data.id.size() <= 128 &&
+        (!('missionTitle' in data) || (data.missionTitle is string && data.missionTitle.size() <= 200)) &&
+        (!('reflection' in data) || (data.reflection is string && data.reflection.size() <= 2000)) &&
+        (!('rating' in data) || (data.rating is number && data.rating >= 0 && data.rating <= 5));
+    }
+
+    // =========================================================================
+    // DEFAULT DENY CATCH-ALL
+    // =========================================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // USER PROFILES
+    // =========================================================================
+
+    match /users/{userId} {
+      // Direct document read allowed only by owner (prevents user directory enumeration)
+      allow get: if isOwner(userId);
+      allow list: if false;
+
+      // Create: user must own document, ID must match UID, data must be valid
+      allow create: if isOwner(userId) &&
+        isValidId(userId) &&
+        incoming().uid == request.auth.uid &&
+        isValidUserProfile(incoming());
+
+      // Update: user must own document, cannot alter UID, data must be valid
+      allow update: if isOwner(userId) &&
+        isValidId(userId) &&
+        incoming().uid == existing().uid &&
+        isValidUserProfile(incoming());
+
+      // Delete: only owner can delete their own account data
+      allow delete: if isOwner(userId);
+
+      // =======================================================================
+      // OPTIONAL USER ADVENTURES SUBCOLLECTION
+      // =======================================================================
+      match /adventures/{adventureId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) &&
+          isValidId(adventureId) &&
+          incoming().userId == request.auth.uid &&
+          isValidAdventure(incoming(), userId);
+        allow update: if isOwner(userId) &&
+          isValidId(adventureId) &&
+          incoming().userId == existing().userId &&
+          isValidAdventure(incoming(), userId);
+        allow delete: if isOwner(userId);
+      }
+
+      // =======================================================================
+      // OPTIONAL USER MEMORIES SUBCOLLECTION
+      // =======================================================================
+      match /memories/{memoryId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) &&
+          isValidId(memoryId) &&
+          incoming().userId == request.auth.uid &&
+          isValidMemory(incoming(), userId);
+        allow update: if isOwner(userId) &&
+          isValidId(memoryId) &&
+          incoming().userId == existing().userId &&
+          isValidMemory(incoming(), userId);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
+
