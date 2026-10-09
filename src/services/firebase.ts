@@ -22,15 +22,16 @@ import {
 import { UserProfile } from '../types';
 
 /**
- * User provided Firebase configuration for TrailMind AI
+ * Firebase Client Configuration for TrailMind AI
+ * Configured via Vite environment variables (VITE_FIREBASE_*)
  */
 export const firebaseConfig = {
-  apiKey: "AIzaSyAAPBaWyCunoVnfFtyVxfdkSdrzsvfY68A",
-  authDomain: "trailmind-ai-4316a.firebaseapp.com",
-  projectId: "trailmind-ai-4316a",
-  storageBucket: "trailmind-ai-4316a.firebasestorage.app",
-  messagingSenderId: "533500160007",
-  appId: "1:533500160007:web:ce445cc5d48cf1ab60e2a2"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'trailmind-ai-4316a.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'trailmind-ai-4316a',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'trailmind-ai-4316a.firebasestorage.app',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '533500160007',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:533500160007:web:ce445cc5d48cf1ab60e2a2',
 };
 
 // Initialize Firebase safely (avoid duplicate app initializations)
