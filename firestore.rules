@@ -44,8 +44,6 @@ service cloud.firestore {
           'lastLoginAt',
           'totalAdventures',
           'totalOutdoorMinutes',
-          'lastAdventureAt',
-          'lastAdventureTitle',
           'serverCreatedAt',
           'updatedAt'
         ]) &&
@@ -60,9 +58,7 @@ service cloud.firestore {
         (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 64)) &&
         (!('lastLoginAt' in data) || (data.lastLoginAt is string && data.lastLoginAt.size() <= 64)) &&
         (!('totalAdventures' in data) || (data.totalAdventures is number && data.totalAdventures >= 0)) &&
-        (!('totalOutdoorMinutes' in data) || (data.totalOutdoorMinutes is number && data.totalOutdoorMinutes >= 0)) &&
-        (!('lastAdventureAt' in data) || (data.lastAdventureAt is string && data.lastAdventureAt.size() <= 64)) &&
-        (!('lastAdventureTitle' in data) || (data.lastAdventureTitle is string && data.lastAdventureTitle.size() <= 200));
+        (!('totalOutdoorMinutes' in data) || (data.totalOutdoorMinutes is number && data.totalOutdoorMinutes >= 0));
     }
 
     function isValidAdventure(data, userId) {
